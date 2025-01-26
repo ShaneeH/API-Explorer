@@ -32,7 +32,7 @@ export const apiService = {
                     'Content-Type': contentType
                 }
             });
-            return response.data;
+            return response;
         } catch (error) {
             console.error(`Error in POST request to ${url}:`, error.message);
             throw error;

@@ -1,4 +1,6 @@
 <template>
+  
+  <div class="request_view" style="margin-left: 12px;">
   <h3> GET ({{ get_qty }}) <el-switch v-model="show_GET" /> </h3>
 
   <!-- Conditionally render based on switch value -->
@@ -10,7 +12,13 @@
   <br>
 
   <h3> POST ({{ post_qty }}) <el-switch v-model="show_POST" class="ml-2" style="--el-switch-on-color: #13ce66;" /> </h3>
-  <POST />
+  <div v-if="show_POST">
+    <div v-for="(endpoint, index) in endPoints.POST_Methods" :key="index">
+      <POST :endpoint="endpoint" />
+    </div>
+  </div>
+</div>
+ 
 </template>
 
 <script setup>

@@ -1,14 +1,15 @@
 <template>
-  <el-button type="primary" @click="sendGET">{{ endpointRef }}</el-button>
-
-  <i class="pi pi-pencil" style="color: gray; margin-left: 6px;"></i>
+  <el-button type="primary" @click="sendGET">{{ endpointRef }}</el-button> 
+  
+ <i class="pi pi-pencil" style="color: gray; margin-left: 7px; cursor: pointer;"></i>
+ <i class="pi pi-cog" style="color: gray; margin-left: 7px; cursor: pointer;"></i>
 
   <div v-if="response.code">
     <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
       <i v-if="response.isSuccess" class="pi pi-check-square" style="color: gray; margin-right: 6px; "></i>
       <i v-if="!response.isSuccess" class="pi pi-exclamation-triangle" style="color: gray; margin-right: 4px; "></i>
       {{ response.code }} - {{ response.isSuccess ? 'Success ' : response.errMessage }}
-
+      
       <!-- Clock icon and response time -->
       <el-divider direction="vertical" />
       <i class="pi pi-clock" style="color: gray; margin-left: 6px;"></i>
@@ -77,13 +78,13 @@ const sendGET = async () => {
 <style scoped>
 .green-text {
   color: green;
-
+  
   font-size: 14px;
 }
 
 .red-text {
   color: rgb(248, 69, 24);
-
+  
   font-size: 14px;
 }
 </style>

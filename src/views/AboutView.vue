@@ -1,22 +1,27 @@
 <template>
-    <h2>vue-code-highlight example</h2>
-    <code-highlight language="javascript">
-      {
-  "id": 10,
-  "petId": 198772,
-  "quantity": 7,
-  "shipDate": "2025-01-26T00:03:04.949Z",
-  "status": "approved",
-  "complete": true
-}
-    </code-highlight>
+  <h3>Hello</h3>
+  <!-- Use the code block inside <pre> to preserve whitespace and format the code -->
+  <pre><code ref="codeElement" class="json">{{ code }}</code></pre>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import CodeHighlight from "vue-code-highlight/src/CodeHighlight.vue";
-import "vue-code-highlight/themes/duotone-sea.css";
+import { ref, onMounted } from 'vue';
+import hljs from 'highlight.js'; // Import highlight.js
+import 'highlight.js/styles/vs2015.css'; // Use monokai for dark background
 
+ // Import your desired style
 
+const code = ref(`{
+  "userId": 1,
+  "id": 1,
+  "body": "quia et suscipit\nsuscipit recusm est autem sunt rem eveniet architecto"
+}
+`);
 
+onMounted(() => {
+  // Highlight the code when the component is mounted
+  const codeElement = document.querySelector('code');
+  hljs.highlightElement(codeElement);
+});
 </script>
+

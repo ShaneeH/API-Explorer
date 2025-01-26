@@ -3,7 +3,7 @@ import axios from 'axios';
 // Base configuration for Axios
 
 const apiClient = axios.create({
-    timeout: 5000, // Adjust the timeout as needed
+    timeout: 8000, // Adjust the timeout as needed
     headers: {
         'Content-Type': 'application/json',
     },
@@ -24,13 +24,18 @@ export const apiService = {
     },
 
      //This is the Default POST Request
-    async post(url, data = {}) {
+     async post(url, data = {}, content = 'json') {
         try {
-            const response = await apiClient.post(url, data);
+            const contentType = `application/${content}`;
+            const response = await apiClient.post(url, data, {
+                headers: {
+                    'Content-Type': contentType
+                }
+            });
             return response.data;
         } catch (error) {
             console.error(`Error in POST request to ${url}:`, error.message);
             throw error;
         }
-    },
+    }
 };

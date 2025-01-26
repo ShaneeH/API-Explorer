@@ -4,7 +4,8 @@ export const endPoints = {
   GET_Methods: [
     'https://catfact.ninja/fact',
     'https://catfact.ninja/fact',
-    'https://catfact.ninja/error'
+    'Error Example',
+   ' https://jsonplaceholder.typicode.com/posts/1'
   ],
   POST_Methods: [
     'https://reqbin.com/echo/post/json'

@@ -1,3 +1,4 @@
 * feautre to add GET & POST Endpoints we can use Localstorage to hold them
 * USE THE Drawer Component to add a slider Nav
+*Add when you hover over a URL it lets you change it *
 ! Dont forget to remove any unused libraries/packages from you're project

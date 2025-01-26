@@ -6,6 +6,8 @@ import 'element-plus/dist/index.css';
 import {VueHighlightJS} from 'vue3-highlightjs'
 import 'highlight.js/styles/atom-one-dark.css'; 
 import VueCodeHighlight from "vue-code-highlight";
+import 'primeicons/primeicons.css';
+
 
 createApp(App)
   .use(router)
@@ -13,3 +15,5 @@ createApp(App)
   .use(VueHighlightJS)
   .use(VueCodeHighlight)
   .mount('#app');
+
+

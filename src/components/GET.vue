@@ -1,5 +1,7 @@
 <template>
-  <el-button type="primary" @click="sendGET">GET {{ endpointRef }}</el-button>
+  
+  
+  <el-button type="primary" @click="sendGET">{{ endpointRef }}</el-button>
 
   <div v-if="response.code">
 
@@ -22,9 +24,6 @@
 <script setup>
 import { ref } from 'vue';
 import { apiService } from '@/services/methods';
-import { Search, Close } from '@element-plus/icons-vue';
-
-
 
 const props = defineProps({
   endpoint: {
@@ -34,6 +33,7 @@ const props = defineProps({
 });
 
 const endpointRef = ref(props.endpoint);
+
 
 const response = ref({
   data: null,
@@ -69,12 +69,12 @@ const sendGET = async () => {
 .green-text {
   color: green;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .red-text {
   color: rgb(248, 69, 24);
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
 }
 </style>

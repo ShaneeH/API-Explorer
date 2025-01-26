@@ -1,13 +1,14 @@
 <template>
-    <h4>{{ endpointRef }}</h4>
-    <button @click="sendGET()">Test Endpoint</button>
-  
-    <p v-if="response.data">{{ response.data }}</p>
+    <el-button type="primary" @click="sendGET">GET {{ endpointRef }}</el-button>
   
     <div v-if="response.code">
-      <p :class="response.isSuccess ? 'green-text' : 'red-text'">
+      <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
         {{ response.code }} - {{ response.isSuccess ? 'Success' : response.errMessage }}
       </p>
+  
+      <div v-if="response.isSuccess && response.data"> 
+        {{response.data}}
+      </div>
     </div>
   </template>
   
@@ -15,7 +16,6 @@
   import { ref } from 'vue';
   import { apiService } from '@/services/methods';
   
-  // Define the prop
   const props = defineProps({
     endpoint: {
       type: String,
@@ -23,7 +23,6 @@
     },
   });
   
-  // Create a reactive reference from the prop value
   const endpointRef = ref(props.endpoint);
   
   const response = ref({
@@ -35,18 +34,14 @@
   
   const sendGET = async () => {
     try {
-      // Call the API service with the reactive endpoint reference
       const data = await apiService.get(endpointRef.value);
-  
-      // Update the response with the fetched data
       response.value = {
-        data: data,
+        data,
         code: 200, // Assuming 200 for success, handle differently if needed
         isSuccess: true,
         errMessage: '',
       };
     } catch (error) {
-      // Handle error and update the response accordingly
       response.value = {
         data: null,
         code: error.response?.status || 500,
@@ -55,19 +50,19 @@
       };
     }
   };
+  
   </script>
   
   <style scoped>
   .green-text {
     color: green;
     font-weight: bold;
-    font-size: 21px;
+    font-size: 15px;
   }
   
   .red-text {
     color: red;
     font-weight: bold;
-    font-size: 21px;
+    font-size: 15px;
   }
   </style>
-  

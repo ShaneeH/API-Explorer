@@ -1,5 +1,5 @@
 <template>
-  <Requests />
+
 
   <h3>GET Requests</h3>
   <div v-for="(endpoint, index) in endPoints.GET_Methods" :key="index">

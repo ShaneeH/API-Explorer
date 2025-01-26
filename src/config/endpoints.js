@@ -5,7 +5,7 @@ export const endPoints = {
     [
       'https://catfact.ninja/fact',
       'https://catfact.ninja/fact',
-      'https://catfact.ninja/fact'
+      'https://catfact.ninja/error'
     ],
 
   POST_Methods:

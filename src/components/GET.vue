@@ -1,26 +1,33 @@
 <template>
-  <el-button type="primary" @click="sendGET">{{ endpointRef }}</el-button> 
-  
- <i class="pi pi-pencil" style="color: gray; margin-left: 7px; cursor: pointer;"></i>
- <i class="pi pi-cog" style="color: gray; margin-left: 7px; cursor: pointer;"></i>
+  <el-button type="primary" @click="sendGET" :loading="loading">{{ loading ? 'Loading...' : endpointRef }}</el-button>
 
-  <div v-if="response.code">
+  <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 18px;" @click="showOptions"></i>
+
+  <!-- The GREEN OR RED TEXT DEPENDING ON THE RESPONSE OF THE API -->
+  <div v-if="response.code && !loading">
     <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
       <i v-if="response.isSuccess" class="pi pi-check-square" style="color: gray; margin-right: 6px; "></i>
       <i v-if="!response.isSuccess" class="pi pi-exclamation-triangle" style="color: gray; margin-right: 4px; "></i>
       {{ response.code }} - {{ response.isSuccess ? 'Success ' : response.errMessage }}
-      
+
       <!-- Clock icon and response time -->
       <el-divider direction="vertical" />
       <i class="pi pi-clock" style="color: gray; margin-left: 6px;"></i>
       <span v-if="response.time !== null" style="margin-left: 6px;">{{ response.time }} ms</span>
     </p>
 
+    <!-- The API RESPONSE DISPLAY -->
     <div v-if="response.isSuccess && response.data">
       <code-highlight language="javascript">
         {{ response.data }}
       </code-highlight>
     </div>
+  </div>
+
+  <br><br>
+  <!-- The Options Menu -->
+  <div v-if="displayOptions">
+    <OptionsMenu :methodType="'GET'" @authClicked="handleAuthClick" />
   </div>
 
   <el-divider border-style="dashed" />
@@ -31,6 +38,7 @@ import { ref } from 'vue';
 import { apiService } from '@/services/methods';
 import CodeHighlight from "vue-code-highlight/src/CodeHighlight.vue";
 import "vue-code-highlight/themes/duotone-sea.css";
+import OptionsMenu from '@/components/OptionsMenu.vue';
 
 const props = defineProps({
   endpoint: {
@@ -40,6 +48,8 @@ const props = defineProps({
 });
 
 const endpointRef = ref(props.endpoint);
+const displayOptions = ref(false);
+const loading = ref(false); // Track loading state
 
 const response = ref({
   data: null,
@@ -50,41 +60,34 @@ const response = ref({
 });
 
 const sendGET = async () => {
-  const startTime = performance.now();  // Record start time before the request
+  loading.value = true; // Set loading to true when request starts
   try {
-    const data = await apiService.get(endpointRef.value);
-    const endTime = performance.now();  // Record end time after the response
-
-    response.value = {
-      data,
-      code: 200,  // Assuming 200 for success, handle differently if needed
-      isSuccess: true,
-      errMessage: '',
-      time: Math.round(endTime - startTime),  // Calculate time in ms
-    };
+    response.value = await apiService.get(endpointRef.value);
   } catch (error) {
-    const endTime = performance.now();  // Record end time even on error
-    response.value = {
-      data: null,
-      code: error.response?.status || 500,
-      isSuccess: false,
-      errMessage: error.message || 'An error occurred',
-      time: Math.round(endTime - startTime),  // Calculate time in ms
-    };
+    response.value = { isSuccess: false, errMessage: error.message };
+  } finally {
+    loading.value = false; // Set loading to false when request finishes
   }
+};
+
+const showOptions = () => {
+  displayOptions.value = !displayOptions.value;
+  console.log(displayOptions.value);
+};
+
+const handleAuthClick = (apiKey) => {
+  console.log('API Key entered:', apiKey);  // Log the entered API key to console
 };
 </script>
 
 <style scoped>
 .green-text {
   color: green;
-  
   font-size: 14px;
 }
 
 .red-text {
   color: rgb(248, 69, 24);
-  
   font-size: 14px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   
-  <div class="request_view" style="margin-left: 12px;">
+  <div class="request_view" style="margin-left: 12px; margin-right: 12px;">
   <h3> GET ({{ get_qty }}) <el-switch v-model="show_GET" /> </h3>
 
   <!-- Conditionally render based on switch value -->

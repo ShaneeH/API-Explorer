@@ -1,5 +1,6 @@
 <template>
   <h3>Hello</h3>
+  <el-alert title="Success alert" type="success" />
   <!-- Use the code block inside <pre> to preserve whitespace and format the code -->
   <pre><code ref="codeElement" class="json">{{ code }}</code></pre>
 </template>

@@ -1,7 +1,25 @@
 <template>
-  <el-button type="primary" @click="sendGET" :loading="loading">{{ loading ? 'Loading...' : endpointRef }}</el-button>
+<div style="display: flex; align-items: center; gap: 8px;">
+  <el-button 
+    :style="{ backgroundColor: 'rgb(103, 160, 214', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }" 
+    @click="sendGET" 
+    :loading="loading"
+  >
+    {{ loading ? 'Loading...' : get }}
+  </el-button>
 
-  <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 18px;" @click="showOptions"></i>
+  <h2 style="margin: 0;">{{ endpointRef }}</h2>
+  <div v-if="displayOptions == false">
+    <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;" @click="showOptions"></i> 
+  </div>
+
+  <div v-if="displayOptions == true">
+    <i class="pi pi-sort-amount-up" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;" @click="showOptions"></i> 
+  </div>
+
+
+  
+</div>
 
   <!-- The GREEN OR RED TEXT DEPENDING ON THE RESPONSE OF THE API -->
   <div v-if="response.code && !loading">
@@ -48,6 +66,7 @@ const props = defineProps({
 });
 
 const endpointRef = ref(props.endpoint);
+const get = ref('GET');
 const displayOptions = ref(false);
 const loading = ref(false); // Track loading state
 

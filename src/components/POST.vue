@@ -2,49 +2,26 @@
     <div class="api-container">
         <!-- Header -->
         <div class="header">
-            <el-button type="success" @click="sendPOST">{{ endpointRef }}</el-button>
-        </div>
-
-        <!-- Input Section -->
-        <div class="input-section">
-            <el-radio-group v-model="body_type" size="medium" class="body-type-selector">
-                <el-radio-button label="JSON" value="json" />
-                <el-radio-button label="XML" value="xml" />
-                <el-radio-button label="YAML" value="yaml" />
-                <el-radio-button label="Text" value="text" />
-            </el-radio-group>
-
-            <el-input
-                v-model="api_key"
-                class="api-key-input"
-                placeholder="Enter API Key"            
-            />
+            <el-button
+                :style="{ backgroundColor: 'rgb(53, 150, 102)', borderColor: 'rgb(53, 150, 102)', color: '#fff' }"
+                @click="sendPOST">
+                {{ endpointRef }}
+            </el-button>
         </div>
 
         <!-- Request Body and Response -->
         <div class="main-content">
             <!-- Request Body -->
-            <el-input
-                v-model="req_body"
-                class="request-body"
-                type="textarea"
-                :autosize="{ minRows: 4, maxRows: 8 }"
-                placeholder="Request Body"
-            />
+            <el-input v-model="req_body" class="request-body" type="textarea" :autosize="{ minRows: 4, maxRows: 8 }"
+                placeholder="Request Body" />
             <!-- Response Display -->
             <div class="response-display">
                 <div v-if="response.code">
                     <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
-                        <i
-                            v-if="response.isSuccess"
-                            class="pi pi-check-square"
-                            style="color: greenyellow; margin-right: 6px;"
-                        ></i>
-                        <i
-                            v-if="!response.isSuccess"
-                            class="pi pi-exclamation-triangle"
-                            style="color: orangered; margin-right: 4px;"
-                        ></i>
+                        <i v-if="response.isSuccess" class="pi pi-check-square"
+                            style="color: greenyellow; margin-right: 6px;"></i>
+                        <i v-if="!response.isSuccess" class="pi pi-exclamation-triangle"
+                            style="color: orangered; margin-right: 4px;"></i>
                         {{ response.code }} - {{ response.isSuccess ? 'Success' : response.errMessage }}
 
                         <!-- Clock icon and response time -->
@@ -61,6 +38,12 @@
                 </div>
             </div>
         </div>
+        <el-radio-group v-model="body_type" size="small" class="body-type-selector">
+            <el-radio-button label="JSON" value="json" />
+            <el-radio-button label="XML" value="xml" />
+            <el-radio-button label="YAML" value="yaml" />
+            <el-radio-button label="Text" value="text" />
+        </el-radio-group>
     </div>
 </template>
 
@@ -165,14 +148,14 @@ const sendPOST = async () => {
 
 .header {
     display: flex;
-    
+
 }
 
 .input-section {
 
     gap: 1rem;
     align-items: center;
-    
+
 
 }
 

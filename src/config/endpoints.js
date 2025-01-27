@@ -5,7 +5,8 @@ export const endPoints = {
     'https://catfact.ninja/fact',
     'https://catfact.ninja/fact',
     'Error Example',
-   ' https://jsonplaceholder.typicode.com/posts/1'
+    'https://jsonplaceholder.typicode.com/posts/1',
+    'http://universities.hipolabs.com/search'
   ],
   POST_Methods: [
     'https://reqbin.com/echo/post/json',

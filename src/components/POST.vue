@@ -1,13 +1,13 @@
 <template>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <el-button :style="{ backgroundColor: 'rgb(53, 150, 102)', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }"
+            @click="sendGET" :loading="loading">
+            POST
+        </el-button>
+
+        <h2 style="margin: 0;">{{ endpointRef }}</h2>
+    </div>
     <div class="api-container">
-        <!-- Header -->
-        <div class="header">
-            <el-button
-                :style="{ backgroundColor: 'rgb(53, 150, 102)', borderColor: 'rgb(53, 150, 102)', color: '#fff' }"
-                @click="sendPOST">
-                {{ endpointRef }}
-            </el-button>
-        </div>
 
         <!-- Request Body and Response -->
         <div class="main-content">

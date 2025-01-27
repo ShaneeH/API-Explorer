@@ -1,30 +1,30 @@
 <template>
-<div style="display: flex; align-items: center; gap: 8px;">
-  <el-button 
-    :style="{ backgroundColor: 'rgb(103, 160, 214', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }" 
-    @click="sendGET" 
-    :loading="loading"
-  >
-    {{ loading ? 'Loading...' : get }}
-  </el-button>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <el-button :style="{ backgroundColor: 'rgb(103, 160, 214', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }"
+      @click="sendGET" :loading="loading">
+      {{ loading ? 'Loading...' : get }}
+    </el-button>
 
-  <h2 style="margin: 0;">{{ endpointRef }}</h2>
-  <div v-if="displayOptions == false">
-    <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;" @click="showOptions"></i> 
+    <h2 style="margin: 0;">{{ endpointRef }}</h2>
+    <div v-if="displayOptions == false">
+      <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;"
+        @click="showOptions"></i>
+    </div>
+
+    <div v-if="displayOptions == true">
+      <i class="pi pi-sort-amount-up" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;"
+        @click="showOptions"></i>
+    </div>
+
+
+
   </div>
-
-  <div v-if="displayOptions == true">
-    <i class="pi pi-sort-amount-up" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;" @click="showOptions"></i> 
-  </div>
-
-
-  
-</div>
 
   <!-- The GREEN OR RED TEXT DEPENDING ON THE RESPONSE OF THE API -->
   <div v-if="response.code && !loading">
     <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
       <i v-if="response.isSuccess" class="pi pi-check-square" style="color: gray; margin-right: 6px; "></i>
+
       <i v-if="!response.isSuccess" class="pi pi-exclamation-triangle" style="color: gray; margin-right: 4px; "></i>
       {{ response.code }} - {{ response.isSuccess ? 'Success ' : response.errMessage }}
 
@@ -33,7 +33,7 @@
       <i class="pi pi-clock" style="color: gray; margin-left: 6px;"></i>
       <span v-if="response.time !== null" style="margin-left: 6px;">{{ response.time }} ms</span>
     </p>
-
+    <i v-if="response.isSuccess" class="pi pi-copy" style="color: gray; margin-right: 6px; "></i>
     <!-- The API RESPONSE DISPLAY -->
     <div v-if="response.isSuccess && response.data">
       <code-highlight language="javascript">

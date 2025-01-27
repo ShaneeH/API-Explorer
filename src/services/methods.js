@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Base configuration for Axios
 const apiClient = axios.create({
-    timeout: 8000, // Default timeout
+    timeout: 5000, // Default timeout
     headers: {
         'Content-Type': 'application/json',
     },

@@ -1,9 +1,9 @@
 <template>
-    <el-tabs type="border-card" class="demo-tabs">
+    <el-tabs type="border-card" class="demo-tabs" style="max-width: 550px; width: 100%; margin-right: 10px;">
         <!-- AUTHENTICATION  TAB -->
         <el-tab-pane label="Authentication">
             <el-input v-model="apiKey" placeholder="Enter API Key"
-                style="max-width: 300px; width: 100%; margin-right: 10px;" />
+                style="max-width: 300px; width: 100%; margin-left: 10px;" />
             <el-button type="warning" @click="onAuthClick" text bg>Add Key</el-button>
         </el-tab-pane>
         <!-- END OF AUTHENTICATION TAB -->
@@ -12,14 +12,19 @@
         <el-tab-pane v-if="methodType === 'GET'" label="Params">
             <el-button type="warning" @click="addParams" text bg>Add New Param</el-button>
             <div v-if="paramsNum > 0">
+                <br>
                 <div v-for="( index) in paramsNum" :key="index">
-                    <el-input v-model="apiKey" placeholder="name"
+                    <el-input v-model="params.name" placeholder="name"
                         style="max-width: 180px; width: 100%; margin-right: 10px;" />
-                    <el-input v-model="apiKey" placeholder="value"
+                    <el-input v-model="params.value" placeholder="value"
                         style="max-width: 180px; width: 100%; margin-right: 10px;" />
-                    <button>Set</button>
+                    <el-button @click="setParams(params.name, params.value)">Set</el-button>
+                    <i class="pi pi-trash" style="color: gray; margin-left: 10px; cursor: pointer; font-size: 14px;"></i>
+
                 </div>
+
             </div>
+
         </el-tab-pane>
         <br>
         <!-- END OF ADD PARAMS TAB -->
@@ -41,14 +46,20 @@
 import { ref } from 'vue';
 
 const paramsNum = ref(0);
-const params = ref([]);
+const params = ref([{ name: '', value: '' }]);
+const params_total = ref([]);
 
 function addParams() {
     paramsNum.value = paramsNum.value + 1;
 }
 
-function setParams() {
-    //We send the params back to the GET Component 
+function setParams(name, value) {
+    let param = `${name}=${value}`;
+    params_total.value.push(param);
+
+    console.log(param);
+    console.log(params_total.value);
+
 }
 
 

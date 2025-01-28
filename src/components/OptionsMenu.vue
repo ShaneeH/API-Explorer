@@ -103,24 +103,21 @@ function printArrays() {
 
 function addParamstoURL() {
     console.log('addParams hit');
-
-
      let s = '';
-
     //If its not the last param to be added we add a & at the end
     for (let i = 0; i < params_total.value.length; i++) {
-      
-            let str = params_total.value[i] + '&';
-            s = s + str;
-        
-
+            if(typeof params_total.value[i] !== 'undefined' || null){
+                let str = params_total.value[i] + '&';
+                s = s + str;
+            }    
     }
 
 
 
     let x = url.value + '?' + s;
-    display.value = x;
-    console.log(x); // This is your query string
+    let finsihed_url = x.slice(0, -1);
+    display.value = finsihed_url;
+    console.log(finsihed_url); // This is your query string
 
 }
 

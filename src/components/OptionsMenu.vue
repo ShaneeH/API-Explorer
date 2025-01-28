@@ -10,21 +10,27 @@
 
         <!-- ADD PARAMS TAB -->
         <el-tab-pane v-if="methodType === 'GET'" label="Params">
+            {{ display }}
             <el-button type="warning" @click="addParams" text bg>Add New Param</el-button>
             <div v-if="paramsNum > 0">
                 <br>
                 <div v-for="( index) in paramsNum" :key="index">
-                    <el-input v-model="params.name" placeholder="name"
+                    <el-input v-model="params[index - 1].name" placeholder="name"
                         style="max-width: 180px; width: 100%; margin-right: 10px;" />
-                    <el-input v-model="params.value" placeholder="value"
+                    <el-input v-model="params[index - 1].value" placeholder="value"
                         style="max-width: 180px; width: 100%; margin-right: 10px;" />
-                    <el-button @click="setParams(params.name, params.value)">Set</el-button>
-                    <i class="pi pi-trash" style="color: gray; margin-left: 10px; cursor: pointer; font-size: 14px;"></i>
+                    <el-button @click="setParams(index)">Set</el-button>
+                    <i class="pi pi-trash"
+                        style="color: gray; margin-left: 10px; cursor: pointer; font-size: 14px;"></i>
 
                 </div>
 
             </div>
-
+            <br>
+            <br>
+            <br>
+            <button @click="printArrays">print arrays</button>
+            <button @click="addParamstoURL">print URL</button>
         </el-tab-pane>
         <br>
         <!-- END OF ADD PARAMS TAB -->
@@ -48,17 +54,73 @@ import { ref } from 'vue';
 const paramsNum = ref(0);
 const params = ref([{ name: '', value: '' }]);
 const params_total = ref([]);
+const url = ref('http://apiexample/people/');
+const display = ref('');
+
 
 function addParams() {
+    params.value.push([{ name: '', value: '' }]);
     paramsNum.value = paramsNum.value + 1;
+
 }
 
-function setParams(name, value) {
-    let param = `${name}=${value}`;
-    params_total.value.push(param);
+function setParams(index) {
 
-    console.log(param);
-    console.log(params_total.value);
+
+    //WE Set Param to the Text Field INDEX 
+
+    let name = params.value[index - 1].name;
+    let value = params.value[index - 1].value;
+    let param = `${name}=${value}`;
+
+    console.log(`At field ${index} : ${param}`);
+    //Add it to the Array
+    params_total.value[index - 1] = param;
+
+}
+
+
+
+function printArrays() {
+
+    console.log('LOOPING PARAM ARRAY');
+    params.value.forEach((param, index) => {
+        console.log(`Param ${index + 1}:`);
+        console.log(`Name: ${param.name}`);
+        console.log(`Value: ${param.value}`);
+
+    });
+    console.log('***********')
+
+    console.log('LOOPING PARAM_TOTAL ARRAY');
+    // Loop through the 'params_total' array
+    params_total.value.forEach((param, index) => {
+        console.log(`Param ${index + 1}: ${param}`);
+    });
+
+}
+
+
+function addParamstoURL() {
+    console.log('addParams hit');
+
+
+     let s = '';
+
+    //If its not the last param to be added we add a & at the end
+    for (let i = 0; i < params_total.value.length; i++) {
+      
+            let str = params_total.value[i] + '&';
+            s = s + str;
+        
+
+    }
+
+
+
+    let x = url.value + '?' + s;
+    display.value = x;
+    console.log(x); // This is your query string
 
 }
 

@@ -1,50 +1,35 @@
 <template>
-  <div style="display: flex; align-items: center; gap: 8px;">
-    <el-button :style="{ backgroundColor: 'rgb(103, 160, 214', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }"
-      @click="sendGET" :loading="loading">
-      {{ loading ? 'Loading...' : get }}
+  <div class="header">
+    <el-button :style="buttonStyle" @click="sendGET" :loading="loading">
+      {{ loading ? 'Loading...' : 'GET' }}
     </el-button>
 
-    <h2 style="margin: 0;">{{ endpointRef }}</h2>
-    <div v-if="displayOptions == false">
-      <i class="pi pi-cog" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;"
-        @click="showOptions"></i>
-    </div>
+    <h2>{{ endpoint }}</h2>
 
-    <div v-if="displayOptions == true">
-      <i class="pi pi-sort-amount-up" style="color: gray; margin-left: 8px; cursor: pointer; font-size: 21px;"
-        @click="showOptions"></i>
-    </div>
-
-
-
+    <i
+      :class="optionsIconClass"
+      class="options-icon"
+      @click="toggleOptions"
+    ></i>
   </div>
 
-  <!-- The GREEN OR RED TEXT DEPENDING ON THE RESPONSE OF THE API -->
-  <div v-if="response.code && !loading">
-    <p :class="{ 'green-text': response.isSuccess, 'red-text': !response.isSuccess }">
-      <i v-if="response.isSuccess" class="pi pi-check-square" style="color: gray; margin-right: 6px; "></i>
-
-      <i v-if="!response.isSuccess" class="pi pi-exclamation-triangle" style="color: gray; margin-right: 4px; "></i>
-      {{ response.code }} - {{ response.isSuccess ? 'Success ' : response.errMessage }}
-
-      <!-- Clock icon and response time -->
+  <div v-if="response.code && !loading" class="response-status">
+    <p :class="responseClass">
+      <i :class="responseIconClass" class="response-icon"></i>
+      {{ response.code }} - {{ responseMessage }}
       <el-divider direction="vertical" />
-      <i class="pi pi-clock" style="color: gray; margin-left: 6px;"></i>
-      <span v-if="response.time !== null" style="margin-left: 6px;">{{ response.time }} ms</span>
+      <i class="pi pi-clock"></i>
+      <span v-if="response.time !== null">{{ response.time }} ms</span>
     </p>
-    <i v-if="response.isSuccess" class="pi pi-copy" style="color: gray; margin-right: 6px; "></i>
-    <!-- The API RESPONSE DISPLAY -->
-    <div v-if="response.isSuccess && response.data">
+
+    <div v-if="response.isSuccess && response.data" class="response-data">
       <code-highlight language="javascript">
         {{ response.data }}
       </code-highlight>
     </div>
   </div>
 
-  <br><br>
-  <!-- The Options Menu -->
-  <div v-if="displayOptions">
+  <div v-if="displayOptions" class="options-menu">
     <OptionsMenu :methodType="'GET'" @authClicked="handleAuthClick" />
   </div>
 
@@ -52,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { apiService } from '@/services/methods';
 import CodeHighlight from "vue-code-highlight/src/CodeHighlight.vue";
 import "vue-code-highlight/themes/duotone-sea.css";
@@ -65,41 +50,66 @@ const props = defineProps({
   },
 });
 
-const endpointRef = ref(props.endpoint);
-const get = ref('GET');
 const displayOptions = ref(false);
-const loading = ref(false); // Track loading state
+const loading = ref(false);
 
 const response = ref({
   data: null,
   code: null,
   isSuccess: null,
   errMessage: null,
-  time: null,  // This will store the response time
+  time: null,
 });
 
+const buttonStyle = {
+  backgroundColor: 'rgb(103, 160, 214)',
+  borderColor: 'rgb(26, 81, 130)',
+  color: '#ffffff',
+};
+
+const responseClass = computed(() => (response.value.isSuccess ? 'green-text' : 'red-text'));
+const responseIconClass = computed(() => (response.value.isSuccess ? 'pi pi-check-square' : 'pi pi-exclamation-triangle'));
+const responseMessage = computed(() => (response.value.isSuccess ? 'Success' : response.value.errMessage));
+const optionsIconClass = computed(() => (displayOptions.value ? 'pi pi-sort-amount-up' : 'pi pi-cog'));
+
 const sendGET = async () => {
-  loading.value = true; // Set loading to true when request starts
+  loading.value = true;
   try {
-    response.value = await apiService.get(endpointRef.value);
+    response.value = await apiService.get(props.endpoint);
   } catch (error) {
     response.value = { isSuccess: false, errMessage: error.message };
   } finally {
-    loading.value = false; // Set loading to false when request finishes
+    loading.value = false;
   }
 };
 
-const showOptions = () => {
+const toggleOptions = () => {
   displayOptions.value = !displayOptions.value;
-  console.log(displayOptions.value);
 };
 
 const handleAuthClick = (apiKey) => {
-  console.log('API Key entered:', apiKey);  // Log the entered API key to console
+  console.log('API Key entered:', apiKey);
 };
 </script>
 
 <style scoped>
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.options-icon {
+  color: gray;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 21px;
+}
+
+.response-status {
+  margin-top: 16px;
+}
+
 .green-text {
   color: green;
   font-size: 14px;
@@ -108,5 +118,9 @@ const handleAuthClick = (apiKey) => {
 .red-text {
   color: rgb(248, 69, 24);
   font-size: 14px;
+}
+
+.response-data {
+  margin-top: 8px;
 }
 </style>

@@ -5,7 +5,7 @@
             POST
         </el-button>
 
-        <h2 style="margin: 0;">{{ endpointRef }}</h2>
+        <h3 style="margin: 0;">{{ endpointRef }}</h3>
     </div>
     <div class="api-container">
 

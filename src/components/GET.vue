@@ -4,7 +4,7 @@
       {{ loading ? 'Loading...' : 'GET' }}
     </el-button>
 
-    <h2>{{ endpoint }}</h2>
+    <h3>{{ endpoint }}</h3>
 
     <i
       :class="optionsIconClass"

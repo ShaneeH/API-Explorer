@@ -1,22 +1,23 @@
 <template>
-    <el-tabs>
+    
+    <el-tabs :tab-position="'left'" style=" width: 600px; " class="custom-tabs">
+        
         <!-- ADD PARAMS TAB -->
         <el-tab-pane label="Add Params">
-            {{ uri }}
+            URL Preview : {{ url_preview}}
             <div>
                 <div v-for="(param, index) in params" :key="index" style="max-width: 420px; margin: 10px;">
                     <div style="display: flex; gap: 10px;">
-                        <el-input v-model="param.name" placeholder="Name" />
-                        <el-input v-model="param.value" placeholder="Value" />
-                        <el-button  @click="removeParam(index)"><i class="pi pi-trash"></i></el-button>
+                        <el-input @change="addParamsToURL" v-model="param.name" placeholder="Name" />
+                        <el-input @change="addParamsToURL" v-model="param.value" placeholder="Value" />
+                        <el-button @click="removeParam(index)"><i class="pi pi-trash"></i></el-button>
                     </div>
                 </div>
                 <el-button @click="addParam">Add Param</el-button>
                 <el-button @click="addParamsToURL">Set New URL</el-button>
             </div>
-            <br>
-            <button @click="printArrays">Print Arrays</button>
-            <button @click="addParamsToURL">Print URL</button>
+            <br />
+  
         </el-tab-pane>
         <!-- END OF ADD PARAMS TAB -->
 
@@ -32,10 +33,18 @@
 <script setup>
 import { ref } from 'vue';
 
+const props = defineProps({
+  endpoint: {
+    type: String,
+    required: true,
+  },
+});
+
 const uri = ref('');
 const params = ref([{ name: '', value: '' }]);
 const requestBody = ref('');
 const methodType = ref('GET'); // Assuming default method type is GET
+const url_preview = ref('');
 
 const addParam = () => {
     params.value.push({ name: '', value: '' });
@@ -43,6 +52,7 @@ const addParam = () => {
 
 const removeParam = (index) => {
     params.value.splice(index, 1);
+    addParamsToURL();
 };
 
 const printArrays = () => {
@@ -57,10 +67,21 @@ const addParamsToURL = () => {
         }
     });
     console.log(url.toString());
-    uri.value = url.toString();
+   url_preview.value = url.toString();
 };
 </script>
 
-<style scoped>
-/* Add your styles here */
+<style>
+/* Style tab labels */
+.custom-tabs .el-tabs__item {
+  font-size: 15px; /* Increase font size */
+  font-weight: bold; /* Make text bold */
+  color: #7e7e7e; /* Change text color */
+  padding: 12px; /* Add padding for spacing */
+}
+
+.custom-tabs .el-tabs__item.is-active {
+  color: #4a90e2; /* Highlight active tab */
+  /* Optional: Add an indicator for active tabs */
+}
 </style>

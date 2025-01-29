@@ -30,7 +30,7 @@
   </div>
 
   <div v-if="displayOptions" class="options-menu">
-    <OptionsMenu :methodType="'GET'" @authClicked="handleAuthClick" />
+    <OptionsMenu :methodType="'GET'":endpoint="endpoint" @authClicked="handleAuthClick" />
   </div>
 
   <el-divider border-style="dashed" />

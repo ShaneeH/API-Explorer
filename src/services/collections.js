@@ -1,25 +1,41 @@
+// services/collections.js
 
-export function addCollection(collectionName , data){
-    localStorage.setItem(collectionName , data);
-    //Make sure a collection with the same name isnt already there
-}
+const getStoredCollections = () => JSON.parse(localStorage.getItem('collections')) || {}; // Retrieve the JSON LocalStorage Object
 
-export function deleteCollection(){
+const getCollections = async () => {
+    const storedCollections = getStoredCollections();
+    return Object.keys(storedCollections);
+};
 
-}
+const getMethodsForCollection = async (collectionName) => {
+    const storedCollections = getStoredCollections();
+    return storedCollections[collectionName] || [];
+};
 
-export function renameCollection(){
-    
-}
+const createCollection = async (collectionName) => {
+    const storedCollections = getStoredCollections();
 
-export function addItem(){
+    // Check if the collection already exists
+    if (storedCollections[collectionName]) {
+        return false; // Collection already exists
+    }
 
-}
+    storedCollections[collectionName] = []; // Create a new collection with an empty array of methods
+    localStorage.setItem('collections', JSON.stringify(storedCollections));
+    return true; // Successfully created collection
+};
 
-export function removeItem(){
+const addMethodToCollection = async (collectionName, methodData) => {
+    const storedCollections = getStoredCollections();
 
-}
+    // Check if the collection exists
+    if (!storedCollections[collectionName]) {
+        return false; // Collection doesn't exist
+    }
 
-export function editItem(){
+    storedCollections[collectionName].push(methodData);
+    localStorage.setItem('collections', JSON.stringify(storedCollections));
+    return true; // Successfully added method to collection
+};
 
-}
+export { getCollections, getMethodsForCollection, createCollection, addMethodToCollection };

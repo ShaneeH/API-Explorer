@@ -1,7 +1,7 @@
 <template>
   <!-- Button to Open Drawer -->
   <el-button type="primary" @click="toggleDrawer">
-    Open
+    Manage Collections
   </el-button>
 
   <Drawer v-model:showDrawer="showDrawer" />

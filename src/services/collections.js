@@ -9,8 +9,9 @@ const getCollections = async () => {
 
 const getMethodsForCollection = async (collectionName) => {
     const storedCollections = getStoredCollections();
-    return storedCollections[collectionName] || [];
-};
+    const collection = storedCollections[collectionName] || [];
+    return collection; 
+}
 
 const createCollection = async (collectionName) => {
     const storedCollections = getStoredCollections();

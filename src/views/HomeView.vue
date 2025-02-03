@@ -1,4 +1,6 @@
 <template>
+
+  <h3>Collection Selected :  {{ selectedCollection }}</h3>
   <!-- Button to Open Drawer -->
   <el-button type="primary" @click="toggleDrawer">
     Manage Collections
@@ -28,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,  watch } from 'vue';
 import GET from '@/components/GET.vue';
 import POST from '@/components/POST.vue';
 import Drawer from '@/components/Drawer.vue';
@@ -37,10 +39,30 @@ import { endPoints } from '@/config/endpoints';
 const get_qty = ref(endPoints.getMethodsQty);
 const post_qty = ref(endPoints.postMethodsQty);
 const showDrawer = ref(false);
+const selectedCollection = ref('');
+
+function getCollectionFromStorage(){
+  selectedCollection.value = localStorage.getItem('selected Collection');
+}
+
+getCollectionFromStorage()
 
 const toggleDrawer = () => {
   showDrawer.value = true;
+
 };
+
+
+watch(showDrawer, (newVal) => {
+  if (newVal) {
+    getCollectionFromStorage();
+
+  } else {
+    getCollectionFromStorage();
+  }
+});
+
+
 
 const show_GET = ref(true);
 const show_POST = ref(true);

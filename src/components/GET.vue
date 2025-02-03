@@ -4,7 +4,7 @@
       {{ loading ? 'Loading...' : 'GET' }}
     </el-button>
 
-    <h3>{{ endpoint }}</h3>
+    <h3>{{ endpoint.url }}</h3>
 
     <i
       :class="optionsIconClass"
@@ -30,7 +30,7 @@
   </div>
 
   <div v-if="displayOptions" class="options-menu">
-    <OptionsMenu :methodType="'GET'":endpoint="endpoint" @authClicked="handleAuthClick" />
+    <OptionsMenu :methodType="'GET'" :endpoint="endpoint.url" @authClicked="handleAuthClick" />
   </div>
 
   <el-divider border-style="dashed" />
@@ -38,14 +38,14 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { apiService } from '@/services/methods';
+import { apiService } from '@/services/methods';  // Ensure this is correctly defined
 import CodeHighlight from "vue-code-highlight/src/CodeHighlight.vue";
 import "vue-code-highlight/themes/duotone-sea.css";
 import OptionsMenu from '@/components/OptionsMenu.vue';
 
 const props = defineProps({
   endpoint: {
-    type: String,
+    type: Object,
     required: true,
   },
 });
@@ -75,7 +75,7 @@ const optionsIconClass = computed(() => (displayOptions.value ? 'pi pi-sort-amou
 const sendGET = async () => {
   loading.value = true;
   try {
-    response.value = await apiService.get(props.endpoint);
+    response.value = await apiService.get(props.endpoint.url);
   } catch (error) {
     response.value = { isSuccess: false, errMessage: error.message };
   } finally {

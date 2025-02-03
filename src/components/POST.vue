@@ -1,11 +1,11 @@
 <template>
     <div style="display: flex; align-items: center; gap: 8px;">
         <el-button :style="{ backgroundColor: 'rgb(53, 150, 102)', borderColor: 'rgb(26, 81, 130)', color: '#ffffff' }"
-            @click="sendGET" :loading="loading">
+            @click="sendPOST" :loading="loading">
             POST
         </el-button>
 
-        <h3 style="margin: 0;">{{ endpointRef }}</h3>
+        <h3 style="margin: 0;">{{ endpoint.url }}</h3>
     </div>
     <div class="api-container">
 
@@ -56,6 +56,7 @@ import 'vue-code-highlight/themes/duotone-sea.css';
 let body_type = ref('json'); // Default to JSON
 let req_body = ref(''); // User input request body
 let api_key = ref(''); // User input for API key
+let loading = ref(false); // Loading state for POST request
 
 let response = ref({
     code: null,
@@ -67,32 +68,34 @@ let response = ref({
 
 const props = defineProps({
     endpoint: {
-        type: String,
+        type: Object, // Fix the type here
         required: true,
     },
 });
 
-const endpointRef = ref(props.endpoint);
-
 const formatRequestBody = (body, type) => {
-    switch (type) {
-        case 'json':
-            return JSON.parse(body); // Ensure JSON object
-        case 'xml':
-            return body; // XML is typically sent as a string
-        case 'yaml':
-            return body; // YAML can also be sent as plain text
-        case 'text':
-            return body; // Plain text
-        default:
-            throw new Error('Unsupported body type');
+    try {
+        switch (type) {
+            case 'json':
+                return JSON.parse(body); // Ensure JSON object
+            case 'xml':
+                return body; // XML is typically sent as a string
+            case 'yaml':
+                return body; // YAML can also be sent as plain text
+            case 'text':
+                return body; // Plain text
+            default:
+                throw new Error('Unsupported body type');
+        }
+    } catch (error) {
+        console.error('Error parsing request body:', error);
+        return null;
     }
 };
 
 const sendPOST = async () => {
+    loading.value = true; // Set loading to true when sending the request
     const startTime = performance.now(); // Start the timer
-
-    console.log('User input body: ', req_body.value); // Log the user input
 
     try {
         const formattedBody = formatRequestBody(req_body.value, body_type.value);
@@ -104,7 +107,7 @@ const sendPOST = async () => {
         };
 
         const apiResponse = await apiService.post(
-            endpointRef.value,
+            props.endpoint.name, // Use the endpoint from props
             formattedBody,
             body_type.value,
             headers // Pass headers with API key
@@ -134,50 +137,10 @@ const sendPOST = async () => {
         };
 
         console.error('Error in sendPOST:', error.message);
+    } finally {
+        loading.value = false; // Reset loading state when request finishes
     }
 };
+
+// You can define sendGET here if you need it later
 </script>
-
-<style scoped>
-.api-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1rem;
-}
-
-.header {
-    display: flex;
-
-}
-
-.input-section {
-
-    gap: 1rem;
-    align-items: center;
-
-
-}
-
-.api-key-input {
-    margin-left: 50px;
-    width: 250px;
-}
-
-.body-type-selector {
-    flex: 1;
-}
-
-.main-content {
-    display: flex;
-    gap: 1rem;
-}
-
-.request-body {
-    flex: 1;
-}
-
-.response-display {
-    flex: 1;
-}
-</style>

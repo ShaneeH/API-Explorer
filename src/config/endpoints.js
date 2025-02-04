@@ -2,11 +2,11 @@
 export const getEndPointsByCollection = (collectionName) => {
   try {
     // Retrieve the collections data from localStorage
-    const collectionsData = localStorage.getItem('collections');
-    
+    const collectionsData = localStorage.getItem("collections");
+
     if (!collectionsData) {
       console.error("No collections found in localStorage.");
-      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0 };
+      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
     }
 
     let collections;
@@ -14,7 +14,7 @@ export const getEndPointsByCollection = (collectionName) => {
       collections = JSON.parse(collectionsData) || {};
     } catch (jsonError) {
       console.error("Error parsing collections from localStorage:", jsonError);
-      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0 };
+      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
     }
 
     // Initialize GET and POST method arrays for the specific collection
@@ -26,12 +26,12 @@ export const getEndPointsByCollection = (collectionName) => {
 
     if (!selectedCollection) {
       console.error(`Collection "${collectionName}" not found.`);
-      return { GET_Methods, POST_Methods, getMethodsQty: 0, postMethodsQty: 0, totalQty: 0 };
+      return { GET_Methods, POST_Methods, getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
     }
 
     try {
       // Separate GET and POST methods from the selected collection
-      selectedCollection.forEach(item => {
+      selectedCollection.forEach((item) => {
         if (item.method === "GET") {
           GET_Methods.push(item);
         } else if (item.method === "POST") {
@@ -40,7 +40,7 @@ export const getEndPointsByCollection = (collectionName) => {
       });
     } catch (iterationError) {
       console.error("Error processing collection items:", iterationError);
-      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0 };
+      return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
     }
 
     // Calculate quantities dynamically
@@ -48,16 +48,18 @@ export const getEndPointsByCollection = (collectionName) => {
     const postMethodsQty = POST_Methods.length;
     const totalQty = getMethodsQty + postMethodsQty;
 
+  
+
     return {
       GET_Methods,
       POST_Methods,
       getMethodsQty,
       postMethodsQty,
-      totalQty
+      totalQty 
     };
   } catch (e) {
     console.error("Unexpected error in getEndPointsByCollection:", e);
-    return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0 };
+    return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
   }
 };
 

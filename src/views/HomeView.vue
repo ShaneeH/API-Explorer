@@ -34,6 +34,7 @@ import { ref, watch } from 'vue';
 import GET from '@/components/GET.vue';
 import POST from '@/components/POST.vue';
 import Drawer from '@/components/Drawer.vue';
+import getEndPointsByCollection from '@/config/endpoints';
 const showDrawer = ref(false);
 const selectedCollection = ref('');
 const GET_Requests = ref([]);
@@ -41,46 +42,21 @@ const POST_Requests = ref([]);
 
 
 function getCollectionFromStorage() {
-  // Get the currently selected collection
+
   let selectedCollection = localStorage.getItem('selected Collection');
 
-  // Get all collections from localStorage
-  let allCollections = JSON.parse(localStorage.getItem('collections'));
-
-  // Ensure the collection exists before accessing it
-  if (allCollections && allCollections[selectedCollection]) {
-    let selectedData = allCollections[selectedCollection]; // Full collection data
-
-    // Create separate arrays for GET and POST requests
-    let getRequests = [];
-    let postRequests = [];
-
-     GET_Requests.value = [];
-     POST_Requests.value = [];
-
-
-    // Iterate through the selected collection
-    selectedData.forEach(item => {
-      if (item.method === "GET") {
-        getRequests.push(item);
-        GET_Requests.value.push(item);
-      } else if (item.method === "POST") {
-        postRequests.push(item);
-        POST_Requests.value.push(item);
-      }
-    });
-
-    console.log("GET Requests:", getRequests);
-    console.log("POST Requests:", postRequests);
-
-    return { getRequests, postRequests }; // Return the categorized data
-  } else {
-    console.error("Selected collection not found in storage.");
-    return { getRequests: [], postRequests: [] };
+  try {
+    GET_Requests.value = getEndPointsByCollection(selectedCollection).GET_Methods;
+    POST_Requests.value = getEndPointsByCollection(selectedCollection).POST_Methods;
+    
+  } catch (e) {
+    console.log(e);
+    GET_Requests.value = [];
+    POST_Requests.value = [];
+    selectedCollection.value = "Error handling Data";
   }
+
 }
-
-
 
 getCollectionFromStorage()
 

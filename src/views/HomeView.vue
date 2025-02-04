@@ -34,10 +34,6 @@ import { ref, watch } from 'vue';
 import GET from '@/components/GET.vue';
 import POST from '@/components/POST.vue';
 import Drawer from '@/components/Drawer.vue';
-import { endPoints } from '@/config/endpoints';
-
-const get_qty = ref(endPoints.getMethodsQty);
-const post_qty = ref(endPoints.postMethodsQty);
 const showDrawer = ref(false);
 const selectedCollection = ref('');
 const GET_Requests = ref([]);

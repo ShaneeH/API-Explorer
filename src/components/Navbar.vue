@@ -1,8 +1,10 @@
 <template>
     <nav class="navbar">
+       
+  
         <el-row type="flex" justify="space-between" align="middle">
             <el-col :span="6" class="navbar-title">
-                API Explorer
+                
             </el-col>
             <el-col :span="12" class="navbar-content">
                 <router-link to="/">Home</router-link> |

@@ -1,72 +1,80 @@
 <template>
-
-    {{ endpoint.url }}{{ queryString }}
-    <button @click="sendParams()"> {{ endpoint.method }}</button>
-    <div v-for="(param, index) in queryParams" :key="index" class="param-input">
-        <input v-model="param.name" placeholder="Name" />
-        <input v-model="param.value" placeholder="Value" />
-        <button @click="removeParam(index)">Remove</button>
+    <div class="request-builder">
+   
+        <div class="url-display">
+          
+          <el-tag  size="large" type="primary"  effect="dark"  ><h4>{{ fullUrl }}</h4></el-tag>
+          <el-button  @click="sendParams">{{ endpoint.method }}</el-button>
+        </div>
+  
+        <el-row justify="space-between" class="controls">
+          <el-button type="success" @click="addParam" plain>+ Add Param</el-button>
+        </el-row>
+  
+        <el-form>
+          <el-row  v-for="(param, index) in queryParams" :key="index"class="param-row"  align="middle" gutter="10" >
+            <el-col :span="8">
+              <el-input v-model="param.name" placeholder="Name" clearable />
+            </el-col>
+            <el-col :span="8">
+              <el-input v-model="param.value" placeholder="Value" clearable />
+            </el-col>
+            <el-col :span="4">
+              <el-button type="danger" @click="removeParam(index)" plain>-</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
+   
     </div>
-    <button @click="addParam">Add Param</button>
-
-</template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import qs from 'qs';
-import editURL from '@/config/editURL';
-let url_final = ref('');
-
-const props = defineProps({
+  </template>
+  
+  <script setup>
+  import { ref, computed } from "vue";
+  import qs from "qs";
+  
+  const props = defineProps({
     endpoint: {
-        type: Object,
-        required: true,
+      type: Object,
+      required: true,
     },
-});
-
-const queryParams = ref([{ name: '', value: '' }]);
-
-const addParam = () => {
-    queryParams.value.push({ name: '', value: '' });
-};
-
-const removeParam = (index) => {
-    queryParams.value.splice(index, 1);
-};
-
-const queryString = computed(() => {
+  });
+  
+  const queryParams = ref([{ name: "", value: "" }]);
+  
+  const addParam = () => queryParams.value.push({ name: "", value: "" });
+  const removeParam = (index) => queryParams.value.splice(index, 1);
+  
+  const fullUrl = computed(() => {
     const params = queryParams.value
-        .filter(param => param.name && param.value)
-        .reduce((acc, param) => {
-            acc[param.name] = param.value;
-            return acc;
-        }, {});
+      .filter((p) => p.name && p.value)
+      .reduce((acc, p) => ({ ...acc, [p.name]: p.value }), {});
+  
+    return props.endpoint.url + qs.stringify(params, { addQueryPrefix: true });
+  });
+  
+  const sendParams = () => {
+    console.log(`Sending request: ${props.endpoint.method} ${fullUrl.value}`);
+  };
+  </script>
+  
+  <style scoped>
+  .request-builder {
 
-
-    let x = qs.stringify(params, { addQueryPrefix: true });
-    url_final.value = props.endpoint.url + x;
-    console.log(url_final.value);
-    return x;
-});
-
-const sendParams = () => {
-    let url = url_final.value;
-    let method = props.endpoint.method;
-
-
-
-    editURL.updateMethodURL(localStorage.getItem('selected Collection'), props.endpoint.name, url);
-
-
-    console.log('Updated Name');
-}
-
-
-
-</script>
-
-<style scoped>
-.param-input {
+    margin: auto;
+  }
+  
+  .url-display {
     margin-bottom: 10px;
-}
-</style>
+    text-align: center;
+ 
+  }
+  
+  .controls {
+    margin-bottom: 15px;
+  }
+  
+  .param-row {
+    margin-bottom: 10px;
+  }
+  </style>
+  

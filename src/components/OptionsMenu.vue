@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" style=" width: 600px; " class="custom-tabs">
+  <el-tabs :tab-position="'left'" style=" width: 800px; " class="custom-tabs">
 
     <!-- ADD PARAMS TAB -->
     <el-tab-pane label="Query Params">
@@ -45,12 +45,5 @@ const props = defineProps({
   color: #4a90e2;
 }
 
-.url-preview {
-  margin-bottom: 15px;
-  padding: 5px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #4b92e3;
-}
+
 </style>

@@ -3,8 +3,8 @@
     <h4>Change URL</h4>
     <button @click="updateURL()">Update URL</button>
 
-    <h4>Change NAME</h4>
-    <button @click="updateNAME()">Update URL</button>
+    <h4>Change Method</h4>
+    <button @click="updateMethod()">Update Method</button>
 
 </template>
 
@@ -12,17 +12,18 @@
 
 import editURL from '@/config/editURL';
 import editName from '@/config/editName';
+import editMethod from '@/config/editMethod';
 
 function updateURL() {
     console.log('update cliked 1');
-    editURL.updateMethodURL('Test Collection', 'T', 'sweeet');
+    editURL.updateMethodURL('Test Collection', 'T', 'htttp:/get/AllCocks');
     console.log('update cliked 2');
 
 }
 
-function updateNAME() {
+function updateMethod() {
     console.log('update cliked 1');
-    editName.updateMethodNAME('Test Collection', 'T', 'NEW NAME WHO DIS');
+    editMethod.updateMethodType('Test Collection', 'NEW NAME WHO DIS', 'POST');
     console.log('update cliked 2');
 }
 

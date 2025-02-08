@@ -1,60 +1,72 @@
 <template>
 
-    <el-tab-pane label="Query Params">
-        <div class="url-preview">
-            {{ url_preview }} 
-            <el-button @click="addParam">{{ type }}</el-button>
-        </div>
-        <div>
-            <div v-for="(param, index) in params" :key="index" style="max-width: 420px; margin: 10px;">
-                <div style="display: flex; gap: 10px;">
-                    <el-input v-model="param.name" placeholder="Name" @change="addParamsToURL" />
-                    <el-input v-model="param.value" placeholder="Value" @change="addParamsToURL" />
-                    <el-button @click="removeParam(index)"><i class="pi pi-trash"></i></el-button>
-                </div>
-            </div>
-            <el-button @click="addParam">Add Param</el-button>
-            <el-button @click="addParamsToURL">Set New URL</el-button>
-        </div>
+    {{ endpoint.url }}{{ queryString }}
+    <button @click="sendParams()"> {{ endpoint.method }}</button>
+    <div v-for="(param, index) in queryParams" :key="index" class="param-input">
+        <input v-model="param.name" placeholder="Name" />
+        <input v-model="param.value" placeholder="Value" />
+        <button @click="removeParam(index)">Remove</button>
+    </div>
+    <button @click="addParam">Add Param</button>
 
-    </el-tab-pane>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { ref, computed } from 'vue';
+import qs from 'qs';
+import editURL from '@/config/editURL';
+let url_final = ref('');
 
 const props = defineProps({
-    url: String,
-    type: String,
-    params: Array,
-    url_preview: String,
+    endpoint: {
+        type: Object,
+        required: true,
+    },
 });
 
-const emit = defineEmits(['add-param', 'remove-param', 'add-params-to-url']);
+const queryParams = ref([{ name: '', value: '' }]);
 
-// Add a new parameter row
 const addParam = () => {
-    emit('add-param');
+    queryParams.value.push({ name: '', value: '' });
 };
 
-// Remove a parameter row by index
 const removeParam = (index) => {
-    emit('remove-param', index);
+    queryParams.value.splice(index, 1);
 };
 
-// Update the URL preview
-const addParamsToURL = () => {
-    emit('add-params-to-url');
-};
+const queryString = computed(() => {
+    const params = queryParams.value
+        .filter(param => param.name && param.value)
+        .reduce((acc, param) => {
+            acc[param.name] = param.value;
+            return acc;
+        }, {});
+
+
+    let x = qs.stringify(params, { addQueryPrefix: true });
+    url_final.value = props.endpoint.url + x;
+    console.log(url_final.value);
+    return x;
+});
+
+const sendParams = () => {
+    let url = url_final.value;
+    let method = props.endpoint.method;
+
+
+
+    editURL.updateMethodURL(localStorage.getItem('selected Collection'), props.endpoint.name, url);
+
+
+    console.log('Updated Name');
+}
+
+
+
 </script>
 
 <style scoped>
-.url-preview {
-    margin-bottom: 15px;
-    padding: 5px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #6c96c5;
+.param-input {
+    margin-bottom: 10px;
 }
 </style>

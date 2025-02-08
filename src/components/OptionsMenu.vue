@@ -1,36 +1,27 @@
 <template>
   <el-tabs :tab-position="'left'" style=" width: 600px; " class="custom-tabs">
-      <!-- ADD PARAMS TAB -->
-      <add-params-tab 
-          :url="url" 
-          :type="methodType"
-          :params="params" 
-          :url_preview="url_preview" 
-          @add-param="addParam" 
-          @remove-param="removeParam" 
-          @add-params-to-url="updateURLPreview" 
-      />
 
-      <!-- Request Body Tab -->
-      <el-tab-pane v-if="methodType === 'POST'" label="Request Body">
-          <textarea v-model="requestBody" placeholder="Enter POST data here..." rows="4"></textarea>
-      </el-tab-pane>
+    <!-- ADD PARAMS TAB -->
+    <el-tab-pane label="Query Params">
+      <add-params-tab :endpoint="props.endpoint" />
+    </el-tab-pane>
 
-      <!-- Edit Query Tab -->
-      <el-tab-pane label="Edit Query">
-          Edit Query - Change Method
-      </el-tab-pane>
+    <!-- Edit Query Tab -->
+    <el-tab-pane label="Edit Query">
+      <edit-query-tab :endpoint="props.endpoint"/>
+    </el-tab-pane>
 
-      <!-- Generate Code Tab -->
-      <el-tab-pane label="Generate Code">
-          Generate Code
-      </el-tab-pane>
+    <!-- Generate Code Tab -->
+    <el-tab-pane label="Generate Code">
+      Generate Code
+    </el-tab-pane>
   </el-tabs>
+
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
 import AddParamsTab from './addParamsTab.vue';
+import editQueryTab from './editQueryTab.vue';
 
 const props = defineProps({
   //This objects contains [name url method]
@@ -40,44 +31,6 @@ const props = defineProps({
   },
 });
 
-const url = ref(props.endpoint.url);
-const params = ref([{ name: '', value: '' }]);
-const requestBody = ref('');
-const methodType = ref(props.endpoint.metod); // Default method type
-const url_preview = ref('');
-
-// Add a new parameter row
-const addParam = () => {
-params.value.push({ name: '', value: '' });
-};
-
-// Remove a parameter row by index
-const removeParam = (index) => {
-params.value.splice(index, 1);
-updateURLPreview(); // Update URL preview after removal
-};
-
-// Update the URL preview whenever params change
-const updateURLPreview = () => {
-try {
-  const urlObject = new URL(url.value); // Create URL object
-  urlObject.search = ''; // Clear previous search params
-
-  // Append valid params to the URL
-  params.value.forEach((param) => {
-    if (param.name && param.value) {
-      urlObject.searchParams.append(param.name, param.value);
-    }
-  });
-
-  url_preview.value = urlObject.toString(); // Update preview
-} catch (error) {
-  console.error('Invalid URL:', error);
-}
-};
-
-// Watch for changes in params and update URL preview
-watch(params, updateURLPreview, { deep: true });
 </script>
 
 <style scoped>

@@ -47,7 +47,7 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #1cab45;
+  color: #ffde59;
   font-weight: bold;
   font-size: 21px;
 }
@@ -58,9 +58,5 @@ nav a.dark-mode {
   font-size: 21px;
 }
 
-nav a.router-link-exact-active {
-  color: #1cab45;
-  font-weight: bold;
-  font-size: 21px;
-}
+
 </style>

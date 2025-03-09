@@ -1,5 +1,5 @@
 import { ref, provide, inject } from 'vue';
-
+//This must be implemented from App.Vue -> Components
 const darkModeSymbol = Symbol();
 
 export function provideDarkMode() {

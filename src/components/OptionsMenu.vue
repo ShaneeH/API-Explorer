@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" style=" width: 800px; " class="custom-tabs">
+  <el-tabs :tab-position="'left'"  class="custom-tabs">
 
     <!-- ADD PARAMS TAB -->
     <el-tab-pane label="Query Params">

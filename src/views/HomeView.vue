@@ -43,11 +43,11 @@ const POST_Requests = ref([]);
 
 function getCollectionFromStorage() {
 
-  let selectedCollection = localStorage.getItem('selected Collection');
+  selectedCollection.value = localStorage.getItem('selected Collection');
 
   try {
-    GET_Requests.value = getEndPointsByCollection(selectedCollection).GET_Methods;
-    POST_Requests.value = getEndPointsByCollection(selectedCollection).POST_Methods;
+    GET_Requests.value = getEndPointsByCollection(selectedCollection.value).GET_Methods;
+    POST_Requests.value = getEndPointsByCollection(selectedCollection.value).POST_Methods;
     
   } catch (e) {
     console.log(e);

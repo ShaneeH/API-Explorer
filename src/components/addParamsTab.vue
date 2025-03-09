@@ -4,27 +4,32 @@
         <div class="url-display">
           
           <el-tag  size="large" type="primary"  effect="dark"  ><h4>{{ fullUrl }}</h4></el-tag>
-          <el-button  @click="sendParams">{{ endpoint.method }}</el-button>
+          
         </div>
   
         <el-row justify="space-between" class="controls">
-          <el-button type="success" @click="addParam" plain>+ Add Param</el-button>
+          
         </el-row>
   
         <el-form>
           <el-row  v-for="(param, index) in queryParams" :key="index"class="param-row"  align="middle" gutter="10" >
-            <el-col :span="8">
+            <el-col :span="4">
               <el-input v-model="param.name" placeholder="Name" clearable />
             </el-col>
-            <el-col :span="8">
+            <el-col :span="4">
               <el-input v-model="param.value" placeholder="Value" clearable />
             </el-col>
             <el-col :span="4">
-              <el-button type="danger" @click="removeParam(index)" plain>-</el-button>
+              <el-button type="danger" @click="removeParam(index)" plain><i class="pi pi-trash"></i></el-button>
+             
+              
             </el-col>
           </el-row>
         </el-form>
-   
+        
+        <el-button type="success" @click="addParam" plain>+ Add Param</el-button>
+        <el-button type="primary" @click="addParam" plain>Set as new URL</el-button>
+        <el-button  @click="sendParams">SEND {{ endpoint.method }} Request</el-button>
     </div>
   </template>
   
@@ -65,7 +70,7 @@
   
   .url-display {
     margin-bottom: 10px;
-    text-align: center;
+    text-align: left;
  
   }
   

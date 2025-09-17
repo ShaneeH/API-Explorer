@@ -1,6 +1,19 @@
 // services/collections.js
 
-const getStoredCollections = () => JSON.parse(localStorage.getItem('collections')) || {}; // Retrieve the JSON LocalStorage Object
+const getStoredCollections = () => {
+  try {
+    const raw = localStorage.getItem('collections')
+    if (!raw) {
+      const defaults = { "Default": [] }
+      localStorage.setItem('collections', JSON.stringify(defaults))
+      return defaults
+    }
+    return JSON.parse(raw)
+  } catch (e) {
+    console.error("Failed to parse collections:", e)
+    return {}
+  }
+}
 
 const getCollections = async () => {
     const storedCollections = getStoredCollections();

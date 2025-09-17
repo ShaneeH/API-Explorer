@@ -3,6 +3,7 @@
 
   <h4>Clear Local Storage</h4>
   <button @click="deleteStorage()">Delete Storage</button>
+  <button @click="seedData()">Add Seed Data</button>
 
 
   <div class="about-container">
@@ -24,11 +25,17 @@
 
 
 <script setup>
+import { seedDefaultData } from '@/services/seed_data';
 
 
 
 const deleteStorage = () => {
   localStorage.clear();
+}
+
+const seedData = () => {
+  seedDefaultData();
+
 }
 
 </script>

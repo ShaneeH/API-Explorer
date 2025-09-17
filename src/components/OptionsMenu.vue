@@ -10,8 +10,7 @@
     <el-tab-pane label="Query Params">
       <add-params-tab :endpoint="props.endpoint" />
     </el-tab-pane>
-
-
+    
     <!-- Generate Code Tab -->
     <el-tab-pane label="Generate Code">
       Generate Code

@@ -1,18 +1,18 @@
 // services/collections.js
 
 const getStoredCollections = () => {
-  try {
-    const raw = localStorage.getItem('collections')
-    if (!raw) {
-      const defaults = { "Default": [] }
-      localStorage.setItem('collections', JSON.stringify(defaults))
-      return defaults
+    try {
+        const raw = localStorage.getItem('collections')
+        if (!raw) {
+            const defaults = { "Default": [] }
+            localStorage.setItem('collections', JSON.stringify(defaults))
+            return defaults
+        }
+        return JSON.parse(raw)
+    } catch (e) {
+        console.error("Failed to parse collections:", e)
+        return {}
     }
-    return JSON.parse(raw)
-  } catch (e) {
-    console.error("Failed to parse collections:", e)
-    return {}
-  }
 }
 
 const getCollections = async () => {
@@ -23,7 +23,7 @@ const getCollections = async () => {
 const getMethodsForCollection = async (collectionName) => {
     const storedCollections = getStoredCollections();
     const collection = storedCollections[collectionName] || [];
-    return collection; 
+    return collection;
 }
 
 const createCollection = async (collectionName) => {
@@ -51,5 +51,10 @@ const addMethodToCollection = async (collectionName, methodData) => {
     localStorage.setItem('collections', JSON.stringify(storedCollections));
     return true; // Successfully added method to collection
 };
+
+
+
+
+
 
 export { getCollections, getMethodsForCollection, createCollection, addMethodToCollection };

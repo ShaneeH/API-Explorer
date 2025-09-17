@@ -1,15 +1,16 @@
 <template>
   <el-tabs :tab-position="'left'"  class="custom-tabs">
 
+        <!-- Edit Query Tab -->
+    <el-tab-pane label="Edit Query">
+      <edit-query-tab :endpoint="props.endpoint"/>
+    </el-tab-pane>
+
     <!-- ADD PARAMS TAB -->
     <el-tab-pane label="Query Params">
       <add-params-tab :endpoint="props.endpoint" />
     </el-tab-pane>
 
-    <!-- Edit Query Tab -->
-    <el-tab-pane label="Edit Query">
-      <edit-query-tab :endpoint="props.endpoint"/>
-    </el-tab-pane>
 
     <!-- Generate Code Tab -->
     <el-tab-pane label="Generate Code">

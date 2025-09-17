@@ -1,19 +1,17 @@
-# db
+# API Explorer
 
-## Project setup
-```
-npm install
-```
+## Project Overview
+Welcome to **API Explorer** – your super simple, web-based Postman! 🎉  
+Test APIs in your browser with **no logins, no accounts, no fuss**. Just pick your endpoint, send requests, and see responses instantly. Perfect for developers who want to play with APIs without the extra setup.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Features
+- Send HTTP requests (GET, POST, PUT, DELETE) instantly
+- Save and organize endpoint collections for faster testing
+- View JSON responses neatly formatted in the browser
+- No accounts, no signup – just play and go! 🚀
+- Lightweight, fast, and developer-friendly interface
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Customize Configuration
+See [Vue CLI Configuration Reference](https://cli.vuejs.org/config/).
+

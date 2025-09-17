@@ -4,7 +4,7 @@
       {{ loading ? 'Loading...' : 'GET' }}
     </el-button>
 
-    <h3>{{ endpoint.url }}</h3> 
+    <h3>{{ endpoint.name}} - {{ endpoint.url }}</h3> 
 
     <i
       :class="optionsIconClass"
@@ -95,34 +95,5 @@ const handleAuthClick = (apiKey) => {
 </script>
 
 <style scoped>
-.header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.options-icon {
-  color: gray;
-  margin-left: 8px;
-  cursor: pointer;
-  font-size: 21px;
-}
-
-.response-status {
-  margin-top: 16px;
-}
-
-.green-text {
-  color: green;
-  font-size: 14px;
-}
-
-.red-text {
-  color: rgb(248, 69, 24);
-  font-size: 14px;
-}
-
-.response-data {
-  margin-top: 8px;
-}
+@import '../../assets/styles/GET_style.css'; 
 </style>

@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     v-model="visible"
-    title="Manage Collections"
     :show-close="true"
     @close="closeDrawer"
     :size="drawerSize"
@@ -25,14 +24,30 @@
             />
           </el-select>
         </el-form-item>
+                  <el-table
+            :data="collectionMethods"
+            class="methods-table"
+            style="width: 100%"
+          >
+            <el-table-column prop="method" label="HTTP Method" width="120">
+              <template #default="scope">
+                <el-tag :type="getTagType(scope.row.method)" class="method-tag">
+                  {{ scope.row.method }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="Request Name" width="200" />
+            <el-table-column prop="url" label="URL" />
+          </el-table>
 
         <div v-if="selectedCollection" class="methods-section">
-          <h4>Add Methods to {{ selectedCollection }}</h4>
+          <h5>Add Request to {{ selectedCollection }}</h5>
           <el-form
             :model="form"
             label-position="top"
             ref="methodForm"
             class="method-form"
+            @close="closeDrawer"
           >
             <el-form-item
               label="Request Name"
@@ -86,21 +101,7 @@
             {{ methodAddedMessage }}
           </div>
           <div v-if="methodError" class="error-message">{{ methodError }}</div>
-          <el-table
-            :data="collectionMethods"
-            class="methods-table"
-            style="width: 100%"
-          >
-            <el-table-column prop="method" label="HTTP Method" width="120">
-              <template #default="scope">
-                <el-tag :type="getTagType(scope.row.method)" class="method-tag">
-                  {{ scope.row.method }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="Request Name" width="200" />
-            <el-table-column prop="url" label="URL" />
-          </el-table>
+
         </div>
 
         <el-form-item label="Create New Collection" class="new-collection-section">
@@ -137,7 +138,7 @@ const props = defineProps({
 const emit = defineEmits(['update:showDrawer']);
 
 const visible = ref(props.showDrawer);
-const drawerSize = ref('60%');
+const drawerSize = ref('70%');
 
 watch(() => props.showDrawer, (newVal) => {
   visible.value = newVal;
@@ -241,196 +242,225 @@ const getTagType = (method) => {
 </script>
 
 <style scoped>
+/* Styles the entire drawer with a modern font and subtle gradient background */
 .custom-drawer {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  background: linear-gradient(135deg, #f8fafc 0%, #e8f0fe 100%);
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* Modern Poppins font with system fallbacks */
+  -webkit-font-smoothing: antialiased; /* Smooths font rendering on WebKit browsers */
+  -moz-osx-font-smoothing: grayscale; /* Smooths font rendering on Firefox for macOS */
+  text-rendering: optimizeLegibility; /* Improves text rendering quality */
+  background: linear-gradient(135deg, #f8fafc 0%, #e8f0fe 100%); /* Subtle gradient for a modern look */
 }
 
+/* Container for drawer content with padding and scrollable overflow */
 .drawer-content {
-  padding: 24px;
-  max-width: 100%;
-  overflow-y: auto;
+  padding: 24px; /* Adds space around content */
+  max-width: 100%; /* Ensures content fits within drawer */
+  overflow-y: auto; /* Allows scrolling if content overflows */
 }
 
+/* Styles the main form section with a card-like appearance */
 .collection-form {
-  margin-bottom: 32px;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px; /* Space below the form */
+  background: #ffffff; /* White background for card effect */
+  padding: 20px; /* Inner padding for content */
+  border-radius: 12px; /* Rounded corners for a modern look */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
 }
 
+/* Ensures select and input fields take full available width with a max limit */
 .full-width {
-  width: 100%;
-  max-width: 600px;
+  width: 100%; /* Full width for responsiveness */
+  max-width: 600px; /* Limits width for better readability */
 }
 
+/* Styles input fields with consistent font size and hover effects */
 .input-field {
-  max-width: 100%;
-  font-size: 15px;
-  border-radius: 8px;
-  transition: border-color 0.3s ease;
+  max-width: 100%; /* Full width within parent */
+  font-size: 15px; /* Readable font size */
+  border-radius: 8px; /* Rounded corners for modern look */
+  transition: border-color 0.3s ease; /* Smooth border color change on hover */
 }
 
+/* Hover effect for input fields */
 .input-field:hover {
-  border-color: #6366f1;
+  border-color: #6366f1; /* Indigo border on hover for visual feedback */
 }
 
+/* Styles form labels (deep selector for Element Plus components) */
 :deep(.el-form-item__label) {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1e293b;
-  margin-bottom: 8px;
-  line-height: 1.4;
+  font-size: 14px; /* Slightly smaller font for labels */
+  font-weight: 500; /* Medium weight for emphasis */
+  color: #1e293b; /* Dark slate color for contrast */
+  margin-bottom: 8px; /* Space below labels */
+  line-height: 1.4; /* Improved line height for readability */
 }
 
+/* Styles the methods section with a card-like appearance */
 .methods-section {
-  margin-top: 32px;
-  padding: 20px;
-  border-radius: 12px;
-  background: #f9faff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 32px; /* Space above the section */
+  padding: 20px; /* Inner padding */
+  border-radius: 12px; /* Rounded corners */
+  background: #f9faff; /* Light indigo tint for background */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
 }
 
+/* Styles the method form with spacing below */
 .method-form {
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Space below the form */
 }
 
+/* Styles the Add Method button with modern design */
 .add-method-button {
-  margin: 16px 0;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  background: #6366f1;
-  border: none;
-  transition: background 0.3s ease, transform 0.2s ease;
+  margin: 16px 0; /* Vertical spacing */
+  padding: 12px 24px; /* Comfortable padding for clickability */
+  border-radius: 8px; /* Rounded corners */
+  font-weight: 500; /* Medium font weight for emphasis */
+  background: #6366f1; /* Indigo background */
+  border: none; /* Removes default border */
+  transition: background 0.3s ease, transform 0.2s ease; /* Smooth color and lift effects */
 }
 
+/* Hover effect for Add Method button */
 .add-method-button:hover {
-  background: #4f46e5;
-  transform: translateY(-1px);
+  background: #4f46e5; /* Darker indigo on hover */
+  transform: translateY(-1px); /* Slight lift for interactivity */
 }
 
+/* Styles the table displaying methods */
 .methods-table {
-  margin-top: 24px;
-  border-radius: 8px;
-  overflow: hidden;
+  margin-top: 24px; /* Space above table */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Ensures rounded corners apply to table */
 }
 
+/* Styles HTTP method tags in the table */
 .method-tag {
-  font-weight: 500;
-  border-radius: 6px;
-  padding: 6px 12px;
-  transition: transform 0.2s ease;
+  font-weight: 500; /* Medium weight for readability */
+  border-radius: 6px; /* Rounded corners */
+  padding: 6px 12px; /* Comfortable padding */
+  transition: transform 0.2s ease; /* Smooth zoom effect on hover */
 }
 
+/* Hover effect for method tags */
 .method-tag:hover {
-  transform: scale(1.05);
+  transform: scale(1.05); /* Slight zoom for interactivity */
 }
 
+/* Styles the Create New Collection section */
 .new-collection-section {
-  margin-top: 32px;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 32px; /* Space above section */
 }
 
+/* Styles the Create button */
 .create-button {
-  margin-top: 16px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  background: #10b981;
-  border: none;
-  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 16px; /* Space above button */
+  padding: 12px 24px; /* Comfortable padding */
+  border-radius: 8px; /* Rounded corners */
+  font-weight: 500; /* Medium weight for emphasis */
+  border: none; /* Removes default border */
+  transition: background 0.3s ease, transform 0.2s ease; /* Smooth color and lift effects */
 }
 
+/* Hover effect for Create button */
 .create-button:hover {
-  background: #059669;
-  transform: translateY(-1px);
+  background: #059669; /* Darker emerald green on hover */
+  transform: translateY(-1px); /* Slight lift for interactivity */
 }
 
+/* Styles heading elements */
 h3,
 h4 {
-  margin-bottom: 16px;
-  font-weight: 600;
-  color: #1e293b;
-  letter-spacing: 0.5px;
+  margin-bottom: 16px; /* Space below headings */
+  font-weight: 600; /* Bold weight for emphasis */
+  color: #384c6e; /* Dark blue for contrast */
+  letter-spacing: 0.5px; /* Subtle spacing for modern look */
 }
 
+/* Styles h3 heading */
 h3 {
-  font-size: 24px;
+  font-size: 24px; /* Larger size for main title */
 }
 
+/* Styles h4 heading */
 h4 {
-  font-size: 18px;
+  font-size: 18px; /* Smaller size for section title */
 }
 
+/* Styles error messages */
 .error-message {
-  color: #ef4444;
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 400;
+  color: #ef4444; /* Vibrant red for visibility */
+  font-size: 14px; /* Readable size */
+  margin-top: 8px; /* Space above message */
+  font-weight: 400; /* Regular weight for softer appearance */
 }
 
+/* Styles success messages */
 .success-message {
-  color: #10b981;
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 400;
+  color: #10b981; /* Emerald green for positive feedback */
+  font-size: 14px; /* Readable size */
+  margin-top: 8px; /* Space above message */
+  font-weight: 400; /* Regular weight for softer appearance */
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for tablets and smaller screens */
 @media (max-width: 768px) {
+  /* Reduces padding in drawer content */
   .drawer-content {
     padding: 16px;
   }
 
+  /* Ensures inputs and selects take full width */
   .full-width {
     max-width: 100%;
   }
 
+  /* Reduces h3 font size */
   h3 {
     font-size: 20px;
   }
 
+  /* Reduces h4 font size */
   h4 {
     font-size: 16px;
   }
 
+  /* Reduces padding in form and sections */
   .collection-form,
   .methods-section,
   .new-collection-section {
     padding: 16px;
   }
 
+  /* Reduces label font size */
   :deep(.el-form-item__label) {
     font-size: 13px;
   }
 }
 
+/* Responsive adjustments for mobile screens */
 @media (max-width: 480px) {
+  /* Further reduces padding in drawer content */
   .drawer-content {
     padding: 12px;
   }
 
+  /* Reduces heading font sizes */
   h3,
   h4 {
     font-size: 16px;
   }
 
+  /* Reduces label font size */
   .el-form-item__label {
     font-size: 12px;
   }
 
+  /* Reduces input field font size */
   .input-field {
     font-size: 14px;
   }
 
+  /* Reduces button padding for smaller screens */
   .add-method-button,
   .create-button {
     padding: 10px 20px;

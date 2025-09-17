@@ -31,8 +31,8 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import GET from '@/components/GET.vue';
-import POST from '@/components/POST.vue';
+import GET from '@/components/requests/GET.vue';
+import POST from '@/components/requests/POST.vue';
 import Drawer from '@/components/Drawer.vue';
 import getEndPointsByCollection from '@/config/endpoints';
 const showDrawer = ref(false);

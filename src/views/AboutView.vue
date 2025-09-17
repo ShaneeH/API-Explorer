@@ -1,10 +1,8 @@
 <template>
- 
-    <h4>Change URL</h4>
-    <button @click="updateURL()">Update URL</button>
 
-    <h4>Change Method</h4>
-    <button @click="updateMethod()">Update Method</button>
+
+  <h4>Clear Local Storage</h4>
+  <button @click="deleteStorage()">Delete Storage</button>
 
 
   <div class="about-container">
@@ -13,9 +11,12 @@
       Your new go-to web tool for effortless API testing!
     </h2>
     <p class="description">
-      REST Hub makes working with APIs simple and fun. With features like <strong>easy query parameter customization</strong>, 
-      <strong>quick method execution</strong>, and <strong>real-time response preview</strong>, you can get things done in no time!  
-      Whether you're a developer, tester, or just working with APIs, REST Hub is designed for speed, ease of use, and efficiency. 
+      REST Hub makes working with APIs simple and fun. With features like <strong>easy query parameter
+        customization</strong>,
+      <strong>quick method execution</strong>, and <strong>real-time response preview</strong>, you can get things done
+      in no time!
+      Whether you're a developer, tester, or just working with APIs, REST Hub is designed for speed, ease of use, and
+      efficiency.
       It's lightweight, web-based, and built to help you get the job done with minimal hassle.
     </p>
   </div>
@@ -24,26 +25,11 @@
 
 <script setup>
 
-import editURL from '@/config/editURL';
-import editName from '@/config/editName';
-import editMethod from '@/config/editMethod';
 
-function updateURL() {
-    console.log('update cliked 1');
-    editURL.updateMethodURL('Test Collection', 'T', 'htttp:/get/AllCocks');
-    console.log('update cliked 2');
 
+const deleteStorage = () => {
+  localStorage.clear();
 }
-
-function updateMethod() {
-    console.log('update cliked 1');
-    editMethod.updateMethodType('Test Collection', 'NEW NAME WHO DIS', 'POST');
-    console.log('update cliked 2');
-}
-
-
-
-
 
 </script>
 

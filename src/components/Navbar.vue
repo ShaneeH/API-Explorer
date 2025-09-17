@@ -1,57 +1,68 @@
 <template>
-    <nav class="navbar">
-       
-  
-        <el-row type="flex" justify="space-between" align="middle">
-            <el-col :span="6" class="navbar-title">
-                
-            </el-col>
-            <el-col :span="12" class="navbar-content">
-                <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link>
-                <el-button style="margin-left: 30px" @click="toggleDarkMode" text bg>
-                    <i class="pi pi-lightbulb"></i>
-                </el-button>
-            </el-col>
-        </el-row>
-    </nav>
+  <nav class="navbar">
+    <el-row align="middle" justify="space-between" class="navbar-row">
+      <!-- Left side -->
+      <el-col :span="12" class="navbar-links">
+        <router-link to="/" class="nav-link">Home</router-link>
+        <router-link to="/about" class="nav-link">About</router-link>
+      </el-col>
+
+      <!-- Right side -->
+      <el-col :span="12" class="navbar-actions" style="text-align: right">
+        <el-button @click="toggleDarkMode" circle>
+          <i class="pi pi-lightbulb"></i>
+        </el-button>
+      </el-col>
+    </el-row>
+  </nav>
 </template>
 
 <script setup>
-import { useDarkMode } from '@/composables/useDarkMode';
+import { useDarkMode } from '@/composables/useDarkMode'
 
-const { toggleDarkMode } = useDarkMode();
+const { toggleDarkMode } = useDarkMode()
 </script>
 
 <style scoped>
 .navbar {
-    padding: 10px 0;
+  background: rgb(245, 238, 223);
+  padding: 0.75rem 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 0 0 12px 12px;
 }
 
-.navbar-title {
-    margin-left: 20px;
-    text-align: left;
-    font-weight: bolder;
-    font-size: 1.5em;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+.navbar-row {
+  width: 100%;
 }
 
-.navbar-content {
-    text-align: right;
-    margin-left: 35px;
-    margin-right: 35px;
-
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
 }
 
-.router-link {
-    margin: 0 10px;
-    text-decoration: none;
-    color: #333;
-    margin-left: 35px;
-    margin-right: 35px;
+.nav-link {
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--el-text-color-primary);
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.router-link:hover {
-    color: #409eff;
+.nav-link:hover {
+  color: var(--el-color-primary);
+  transform: translateY(-1px);
+}
+
+.navbar-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.el-button {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.el-button:hover {
+  transform: scale(1.1);
 }
 </style>

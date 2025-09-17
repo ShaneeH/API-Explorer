@@ -20,8 +20,8 @@
 </template>
 
 <script setup>
-import AddParamsTab from './addParamsTab.vue';
-import editQueryTab from './editQueryTab.vue';
+import AddParamsTab from './tabs/addParamsTab.vue';
+import editQueryTab from './tabs/editQueryTab.vue';
 
 const props = defineProps({
   //This objects contains [name url method]

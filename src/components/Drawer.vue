@@ -269,8 +269,8 @@ const getTagType = (method) => {
 
 /* Ensures select and input fields take full available width with a max limit */
 .full-width {
-  width: 100%; /* Full width for responsiveness */
-  max-width: 600px; /* Limits width for better readability */
+  width: 80%; /* Full width for responsiveness */
+  max-width: 500px; /* Limits width for better readability */
 }
 
 /* Styles input fields with consistent font size and hover effects */

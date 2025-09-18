@@ -1,39 +1,24 @@
+import _ from 'lodash';
+
 const updateMethodType = (collectionName, methodName, newMethodType) => {
-    const collectionsData = localStorage.getItem("collections");
+  let collections = JSON.parse(localStorage.getItem('collections')) || {};
 
-    if (!collectionsData) {
-        console.error("No collections found in localStorage.");
-        return { GET_Methods: [], POST_Methods: [], getMethodsQty: 0, postMethodsQty: 0, totalQty: 0, editRequest: null };
-    }
+  if (!collections[collectionName]) {
+    console.error(`Collection "${collectionName}" not found.`);
+    return;
+  }
 
-    let collections = JSON.parse(collectionsData);
+  // Update the method immutably
+  collections[collectionName] = collections[collectionName].map(method =>
+    method.name === methodName
+      ? { ...method, method: newMethodType.toUpperCase() }
+      : method
+  );
 
-    if (!collections[collectionName]) {
-        console.error(`Collection "${collectionName}" not found.`);
-        return;
-    }
+  // Save back to localStorage
+  localStorage.setItem('collections', JSON.stringify(collections));
 
-    let selectedCollection = collections[collectionName];
-
-    // Find the method object.
-    const methodIndex = selectedCollection.findIndex(obj => obj.name === methodName);
-
-    if (methodIndex === -1) {
-        console.error(`Method "${methodName}" not found in collection "${collectionName}".`);
-        return;
-    }
-
-    // Update the method type
-    selectedCollection[methodIndex].method = newMethodType.toUpperCase();
-
-    // Update the collections object with the modified selectedCollection
-    collections[collectionName] = selectedCollection;
-
-    // Save back to localStorage
-    localStorage.setItem("collections", JSON.stringify(collections));
-
-    // Return the updated collections data (optional but good practice)
-    return collections;
+  return collections;
 };
 
 export default { updateMethodType };

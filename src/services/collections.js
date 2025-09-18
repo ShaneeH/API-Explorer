@@ -53,8 +53,4 @@ const addMethodToCollection = async (collectionName, methodData) => {
 };
 
 
-
-
-
-
 export { getCollections, getMethodsForCollection, createCollection, addMethodToCollection };

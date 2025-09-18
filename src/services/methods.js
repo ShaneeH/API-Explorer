@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-// Base configuration for Axios
-const DEFAULT_TIMEOUT = 8000; // Centralized default timeout
+// Base configuration
+const DEFAULT_TIMEOUT = 8000;
 
 const apiClient = axios.create({
-  timeout: 5000, // Base timeout for axios
+  timeout: 5000, // Base timeout
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Error handling function
+// Error handling
 const handleApiError = (error) => {
   if (error.response) {
-    return `Error: ${error.response.status} - ${error.response.data.message || 'Unknown error'}`;
+    return `Error: ${error.response.status} - ${error.response.data?.message || 'Unknown error'}`;
   } else if (error.request) {
     return 'No response received from the server';
   } else {
@@ -34,21 +34,17 @@ const normalizeResponse = ({ data, status, duration }, isSuccess = true, errMess
 export const apiService = {
   async request(method, url, options = {}, timeout = DEFAULT_TIMEOUT) {
     const startTime = performance.now();
+    let responseData = null;
 
     try {
-      const response = await apiClient({
-        method,
-        url,
-        timeout,
-        ...options,
-      });
-
-      const duration = Math.round(performance.now() - startTime);
-      return normalizeResponse({ ...response, duration });
+      const response = await apiClient({ method, url, timeout, ...options });
+      responseData = normalizeResponse({ data: response.data, status: response.status }, true);
     } catch (error) {
-      const duration = Math.round(performance.now() - startTime);
       const errMessage = handleApiError(error);
-      return normalizeResponse({ data: null, status: 500, duration }, false, errMessage);
+      responseData = normalizeResponse({ data: null, status: 500 }, false, errMessage);
+    } finally {
+      responseData.time = Math.round(performance.now() - startTime);
+      return responseData;
     }
   },
 
@@ -57,7 +53,17 @@ export const apiService = {
   },
 
   async post(url, data = {}, content = 'json', timeout = DEFAULT_TIMEOUT) {
-    const headers = { 'Content-Type': `application/${content}` };
+    const headers = { ...apiClient.defaults.headers, 'Content-Type': `application/${content}` };
     return this.request('post', url, { data, headers }, timeout);
   },
+
+  async put(url, data = {}, timeout = DEFAULT_TIMEOUT) {
+    return this.request('put', url, { data }, timeout);
+  },
+
+  async delete(url, params = {}, timeout = DEFAULT_TIMEOUT) {
+    return this.request('delete', url, { params }, timeout);
+  },
 };
+
+export default apiService;

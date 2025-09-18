@@ -3,14 +3,17 @@
 
         <!-- Edit Query Tab -->
     <el-tab-pane label="Edit Query">
-      <edit-query-tab :endpoint="props.endpoint"/>
+      <edit-query-tab :endpoint="props.endpoint"
+       @reload="reloadEndpoint"
+      />
+      
     </el-tab-pane>
 
     <!-- ADD PARAMS TAB -->
     <el-tab-pane label="Query Params">
       <add-params-tab :endpoint="props.endpoint" />
     </el-tab-pane>
-    
+
     <!-- Generate Code Tab -->
     <el-tab-pane label="Generate Code">
       Generate Code

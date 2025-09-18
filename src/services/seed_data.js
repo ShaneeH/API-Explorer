@@ -1,7 +1,7 @@
 // src/config/seedData.js
 
 export function seedDefaultData() {
-  const defaultCollection = [
+  const DefaultCollection = [
     {
       name: "Get Dog Breeds",
       url: "https://dogapi.dog/api/v2/breeds",
@@ -47,8 +47,8 @@ export function seedDefaultData() {
 
   // Store under your collections key if not already there
   const collections = JSON.parse(localStorage.getItem("collections")) || {};
-  if (!collections["Default"] || collections["Default"].length === 0) {
-    collections["Default"] = defaultCollection;
+  if (!collections["MyCollection"] || collections["MyCollection"].length === 0) {
+    collections["MyCollection"] = DefaultCollection;
     localStorage.setItem("collections", JSON.stringify(collections));
     console.log("Seed data added to localStorage!");
   } else {

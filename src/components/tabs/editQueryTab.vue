@@ -40,7 +40,7 @@
 <script setup>
 import { ref } from "vue";
 import "element-plus/dist/index.css";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage , ElLoading } from "element-plus";
 
 import editMethod from "@/config/editMethod";
 import editName from "@/config/editName";
@@ -62,12 +62,41 @@ function markChanged() {
   isChanged.value = true;
 }
 
-function saveChanges() {
-  const collection = localStorage.getItem("selected Collection");
-  editURL.updateMethodURL(collection, props.endpoint.name, url.value);
-  editMethod.updateMethodType(collection, props.endpoint.name, method.value);
-  editName.updateMethodNAME(collection, props.endpoint.name, name.value);
-  isChanged.value = false; // reset change flag
+
+
+async function saveChanges() {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "Saving changes...",
+    background: "rgba(0, 0, 0, 0.3)",
+  });
+
+  try {
+    const collection = localStorage.getItem("selected Collection");
+    editURL.updateMethodURL(collection, props.endpoint.name, url.value);
+    editMethod.updateMethodType(collection, props.endpoint.name, method.value);
+    editName.updateMethodNAME(collection, props.endpoint.name, name.value);
+
+    // Simulate a short delay for smoother UX
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    isChanged.value = false; // reset change flag
+
+    ElMessage({
+      type: "success",
+      message: "Changes saved successfully!",
+    });
+  } catch (err) {
+    console.error(err);
+    ElMessage({
+      type: "error",
+      message: "Failed to save changes",
+    });
+  } finally {
+    loading.close();
+    
+ 
+  }
 }
 
 function confirmDelete() {

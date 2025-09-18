@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <!-- Spinner shown while saving -->
+    <Spinner :loading="isSaving" :text="spinnerMsg" />
+  </div>
+
   <el-col :span="7">
     <el-form-item label="Name">
       <el-input v-model="name" @input="markChanged"></el-input>
@@ -13,39 +18,30 @@
 
   <el-col :span="3">
     <el-form-item label="Method">
-      <el-select
-        v-model="method"
-        placeholder="Select Method"
-        @change="markChanged"
-      >
-        <el-option
-          v-for="m in methods"
-          :key="m"
-          :label="m"
-          :value="m"
-        ></el-option>
+      <el-select v-model="method" placeholder="Select Method" @change="markChanged">
+        <el-option v-for="m in methods" :key="m" :label="m" :value="m"></el-option>
       </el-select>
     </el-form-item>
   </el-col>
 
-  <el-button type="primary" :disabled="!isChanged" @click="saveChanges">
+  <el-button type="primary" :disabled="!isChanged || isSaving" @click="saveChanges">
     Save Changes
   </el-button>
 
-  <el-button type="danger" @click="confirmDelete">
+  <el-button type="danger" @click="confirmDelete" :disabled="isSaving">
     Delete Method
   </el-button>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import "element-plus/dist/index.css";
-import { ElMessageBox, ElMessage , ElLoading } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 
 import editMethod from "@/config/editMethod";
 import editName from "@/config/editName";
 import editURL from "@/config/editURL";
 import deleteMethod from "@/config/deleteMethod";
+import Spinner from "../shared/Spinner.vue";
 
 const props = defineProps({
   endpoint: { type: Object, required: true },
@@ -55,6 +51,8 @@ const name = ref(props.endpoint.name);
 const url = ref(props.endpoint.url);
 const method = ref(props.endpoint.method);
 const isChanged = ref(false);
+const isSaving = ref(false);
+const spinnerMsg = ref("Updating Method ...");
 
 const methods = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"];
 
@@ -62,14 +60,9 @@ function markChanged() {
   isChanged.value = true;
 }
 
-
-
 async function saveChanges() {
-  const loading = ElLoading.service({
-    lock: true,
-    text: "Saving changes...",
-    background: "rgba(0, 0, 0, 0.3)",
-  });
+  isSaving.value = true;
+  spinnerMsg.value = "Updating Method ...";
 
   try {
     const collection = localStorage.getItem("selected Collection");
@@ -77,25 +70,20 @@ async function saveChanges() {
     editMethod.updateMethodType(collection, props.endpoint.name, method.value);
     editName.updateMethodNAME(collection, props.endpoint.name, name.value);
 
-    // Simulate a short delay for smoother UX
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Simulate API latency
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
-    isChanged.value = false; // reset change flag
-
-    ElMessage({
-      type: "success",
-      message: "Changes saved successfully!",
-    });
+    isChanged.value = false;
+    spinnerMsg.value = "Success"; // show success
   } catch (err) {
     console.error(err);
-    ElMessage({
-      type: "error",
-      message: "Failed to save changes",
-    });
+    spinnerMsg.value = "Sorry something went wrong"; // show failure
   } finally {
-    loading.close();
-    
- 
+    // keep spinner visible for a short moment so user can see message
+    setTimeout(() => {
+      isSaving.value = false;
+      spinnerMsg.value = "";
+    }, 1000); // 1 second
   }
 }
 
@@ -111,15 +99,11 @@ function confirmDelete() {
   )
     .then(() => {
       const collection = localStorage.getItem("selected Collection");
-      deleteMethod.removeMethodFromCollection(
-        collection,
-        props.endpoint.name
-      );
+      deleteMethod.removeMethodFromCollection(collection, props.endpoint.name);
       ElMessage({
         type: "success",
         message: "Method deleted successfully",
       });
- 
     })
     .catch(() => {
       ElMessage({

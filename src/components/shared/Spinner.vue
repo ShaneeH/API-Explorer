@@ -1,15 +1,20 @@
+<!-- src/components/shared/Spinner.vue -->
 <template>
   <div v-if="loading" class="spinner">
-    <i class="el-icon-loading"></i>
+    <el-icon class="is-loading">
+      <Loading />
+    </el-icon>
     <span v-if="text" class="ml-2">{{ text }}</span>
   </div>
 </template>
 
 <script setup>
+import { Loading } from '@element-plus/icons-vue'
+
 const props = defineProps({
   loading: { type: Boolean, default: false },
-  text: { type: String, default: "" }
-});
+  text: { type: String, default: '' },
+})
 </script>
 
 <style scoped>
@@ -17,8 +22,15 @@ const props = defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  font-size: 24px;
-  color: #409eff; /* Element Plus blue */
+  font-size: 20px;
+  color: #409eff;
+}
+.is-loading {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

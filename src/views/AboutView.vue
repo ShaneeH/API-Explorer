@@ -4,6 +4,14 @@
   <h4>Clear Local Storage</h4>
   <button @click="deleteStorage()">Delete Storage</button>
   <button @click="seedData()">Add Seed Data</button>
+  <button @click="loadSpinner()">Test Spinner</button>
+
+
+  <div>
+  <Spinner :loading="loading" text="Updating Method Name...." />
+ </div>
+
+
 
 
   <div class="about-container">
@@ -26,7 +34,10 @@
 
 <script setup>
 import { seedDefaultData } from '@/services/seed_data';
+import Spinner from '@/components/shared/Spinner.vue';
+import { ref, computed } from 'vue';
 
+let loading = ref(false);
 
 
 const deleteStorage = () => {
@@ -36,6 +47,11 @@ const deleteStorage = () => {
 const seedData = () => {
   seedDefaultData();
 
+}
+
+const loadSpinner = () => {
+  loading.value = !loading.value;
+  console.log(loading.value);
 }
 
 </script>
